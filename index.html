@@ -239,23 +239,25 @@
                 </div>
 
                 <div class="contact-card">
-                    <form action="https://formsubmit.co/your-email@example.com" method="POST">
+                    <form id="contact-form" action="https://formsubmit.co/your-email@example.com" method="POST">
                         <div>
                             <label for="name">Name</label>
-                            <input type="text" id="name" name="name" placeholder="Enter your name" required aria-label="Your name">
+                            <input type="text" id="name" name="name" placeholder="Enter your name" required minlength="2" maxlength="80" autocomplete="name" aria-label="Your name">
                         </div>
 
                         <div>
                             <label for="email">Email</label>
-                            <input type="email" id="email" name="email" placeholder="Enter your email" required aria-label="Your email">
+                            <input type="email" id="email" name="email" placeholder="Enter your email" required maxlength="254" autocomplete="email" aria-label="Your email">
                         </div>
 
                         <div>
                             <label for="message">Message</label>
-                            <textarea id="message" name="message" placeholder="Write your message here..." required aria-label="Your message"></textarea>
+                            <textarea id="message" name="message" placeholder="Write your message here..." required minlength="20" maxlength="2000" aria-describedby="message-hint" aria-label="Your message"></textarea>
+                            <small id="message-hint">Please provide at least 20 characters so I can understand how to help.</small>
                         </div>
 
                         <button class="submit-btn" type="submit">Send Message</button>
+                        <p class="form-feedback" id="form-feedback" role="status" aria-live="polite"></p>
                     </form>
                 </div>
             </div>
@@ -287,6 +289,40 @@
             const isDark = !document.body.classList.contains("dark-theme");
             updateTheme(isDark);
             localStorage.setItem("theme", isDark ? "dark" : "light");
+        });
+
+        const contactForm = document.querySelector("#contact-form");
+        const messageInput = document.querySelector("#message");
+        const formFeedback = document.querySelector("#form-feedback");
+
+        contactForm.addEventListener("submit", (event) => {
+            const trimmedMessage = messageInput.value.trim();
+            messageInput.setCustomValidity(
+                trimmedMessage.length < 20
+                    ? "Please enter a meaningful message with at least 20 characters."
+                    : ""
+            );
+
+            if (!contactForm.checkValidity()) {
+                event.preventDefault();
+                formFeedback.textContent = "Please review the highlighted fields and correct the errors before sending.";
+                formFeedback.className = "form-feedback error";
+                contactForm.reportValidity();
+                return;
+            }
+
+            formFeedback.textContent = "Thanks! Your message is being sent.";
+            formFeedback.className = "form-feedback success";
+        });
+
+        [contactForm.name, contactForm.email, messageInput].forEach((field) => {
+            field.addEventListener("input", () => {
+                if (field === messageInput) {
+                    messageInput.setCustomValidity("");
+                }
+                formFeedback.textContent = "";
+                formFeedback.className = "form-feedback";
+            });
         });
     </script>
 </body>
