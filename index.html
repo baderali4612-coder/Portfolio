@@ -16,6 +16,9 @@
                 <a href="#projects">Projects</a>
                 <a href="#skills">Skills</a>
                 <a href="#contact">Contact</a>
+                <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark theme" aria-pressed="false">
+                    <span aria-hidden="true">🌙</span> Dark mode
+                </button>
             </nav>
         </div>
     </header>
@@ -264,5 +267,27 @@
             <p>© 2026 Bader Ali | Built with HTML, CSS, and passion.</p>
         </div>
     </footer>
+
+    <script>
+        const themeToggle = document.querySelector("#theme-toggle");
+        const savedTheme = localStorage.getItem("theme");
+
+        function updateTheme(isDark) {
+            document.body.classList.toggle("dark-theme", isDark);
+            themeToggle.setAttribute("aria-pressed", String(isDark));
+            themeToggle.setAttribute("aria-label", isDark ? "Switch to light theme" : "Switch to dark theme");
+            themeToggle.innerHTML = isDark
+                ? '<span aria-hidden="true">☀️</span> Light mode'
+                : '<span aria-hidden="true">🌙</span> Dark mode';
+        }
+
+        updateTheme(savedTheme === "dark");
+
+        themeToggle.addEventListener("click", () => {
+            const isDark = !document.body.classList.contains("dark-theme");
+            updateTheme(isDark);
+            localStorage.setItem("theme", isDark ? "dark" : "light");
+        });
+    </script>
 </body>
 </html>
