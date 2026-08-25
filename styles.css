@@ -412,6 +412,17 @@ textarea:focus {
     box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
 }
 
+input:invalid:not(:placeholder-shown),
+textarea:invalid:not(:placeholder-shown) {
+    border-color: #dc2626;
+}
+
+small {
+    display: block;
+    color: var(--muted);
+    margin-top: 0.35rem;
+}
+
 textarea {
     min-height: 120px;
     resize: vertical;
@@ -432,6 +443,19 @@ textarea {
 .submit-btn:hover {
     background: var(--primary-dark);
     transform: translateY(-2px);
+}
+
+.form-feedback {
+    min-height: 1.6em;
+    font-weight: 600;
+}
+
+.form-feedback.error {
+    color: #dc2626;
+}
+
+.form-feedback.success {
+    color: #16a34a;
 }
 
 footer {
